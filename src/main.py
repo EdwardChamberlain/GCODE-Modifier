@@ -8,7 +8,6 @@ with open(r'examples/PA-on-and-off-trial.gcode', 'r') as f:
 
 find_replace = config['find-append']
 for k, v in find_replace.items():
-    print(f"{k} -> {v}")
     file = [
         i if i.strip() != k else i + v + " ;ADDED BY GCODE EDITOR" + "\n"
         for i in file
