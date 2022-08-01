@@ -1,5 +1,6 @@
 import json
 
+
 with open(r'src/config.json', 'r') as f:
     config = json.loads(f.read())
 
