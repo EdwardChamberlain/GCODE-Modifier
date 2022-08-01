@@ -1,0 +1,65 @@
+import PySimpleGUI as sg
+
+import main
+
+
+file_manager_layout = [
+    [sg.Text("Input File:", size=(12, None), justification='right'), sg.Input(key="INPUT_FILEPATH", enable_events=True), sg.FileBrowse()],
+    [sg.Text("Config File:", size=(12, None), justification='right'), sg.Input(key="INPUT_FILEPATH"), sg.FileBrowse()],
+    [sg.Text("Output File:", size=(12, None), justification='right'), sg.Input(key="OUTPUT_FILEPATH", expand_x=True)],
+]
+
+layout = [
+    [sg.Frame("Files", file_manager_layout)],
+    [sg.Push(), sg.Button("Process!", key="PROCESS"), sg.Push()]
+]
+
+window = sg.Window("Test Window", layout)
+
+while True:
+    event, values = window.read()
+
+    if event == sg.WIN_CLOSED:
+        break
+
+    if event == 'INPUT_FILEPATH':
+        output_field: sg.Input = window['OUTPUT_FILEPATH']
+
+        input_filepath = values["INPUT_FILEPATH"]
+        output_filepath = input_filepath.rsplit('.', maxsplit=1)[0] + '_output.gcode'
+
+        output_field.update(output_filepath)
+
+    if event == "PROCESS":
+        try:
+            config = main.read_config()
+        except FileNotFoundError:
+            sg.popup("Config file is missing? You dum dum.")
+            continue
+
+        try:
+            file = main.read_gcode(values['INPUT_FILEPATH'])
+        except FileNotFoundError:
+            sg.popup("Thats not a real input file you big dum dum.")
+            continue
+
+        try:
+            replace_terms = config['find-append']
+        except Exception:
+            sg.popup("Summit wrong here. Dunno wat.")
+            continue
+
+        file = main.find_replace(file, replace_terms)
+
+        try:
+            with open(values['OUTPUT_FILEPATH'], 'w') as f:
+                f.writelines(file)
+        except Exception:
+            sg.popup("Failed to create output? Big broke. Check its a real file name or summit.")
+            continue
+
+        sg.popup(
+            "Done!"
+        )
+
+window.close()
