@@ -1,0 +1,11 @@
+{
+    "find-append": {
+        ";TYPE:External perimeter": "M572 D0:1 S0.08",
+        ";TYPE:Top solid infill": "M572 D0:1 S0.08",
+        ";TYPE:Internal perimeter": "M572 D0:1 S0.00",
+        ";TYPE:Internal infill": "M572 D0:1 S0.00",
+        ";TYPE:Bridge infill": "M572 D0:1 S0.08",
+        ";TYPE:Solid infill": "M572 D0:1 S0.00",
+        ";TYPE:Gap fill": "M572 D0:1 S0.00"
+    }
+}
